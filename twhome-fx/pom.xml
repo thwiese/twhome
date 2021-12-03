@@ -40,6 +40,11 @@
                                     <mainClass>de.twiese.twhome.fx.Starter</mainClass>
                                 </transformer>
                             </transformers>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.openjfx:*</exclude>
+                                </excludes>
+                            </artifactSet>
                             <filters>
                                 <filter>
                                     <artifact>*:*</artifact>
