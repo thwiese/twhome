@@ -17,6 +17,7 @@
         <java.version>11</java.version>
         <lombok.version>1.18.22</lombok.version>
         <logback.vesion>1.2.7</logback.vesion>
+        <pi4j.version>2.1.0</pi4j.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <!--javafx.platform>windows-x86_64</javafx.platform-->  <!-- linux-x86_64, linux-aarch64, linux-arm32, macosx-x86_64, macosx-aarch64, windows-x86_64, windows-x86 -->
@@ -73,6 +74,22 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.vesion}</version>
+            </dependency>
+            <!-- PI4J -->
+            <dependency>
+                <groupId>com.pi4j</groupId>
+                <artifactId>pi4j-core</artifactId>
+                <version>${pi4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pi4j</groupId>
+                <artifactId>pi4j-plugin-raspberrypi</artifactId>
+                <version>${pi4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pi4j</groupId>
+                <artifactId>pi4j-plugin-pigpio</artifactId>
+                <version>${pi4j.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
