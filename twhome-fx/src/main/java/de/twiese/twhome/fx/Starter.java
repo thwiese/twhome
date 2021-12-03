@@ -6,14 +6,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class Starter extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        log.info("Starting FX app ...");
         stage.setTitle("TW Home");
         Pane pane = new StackPane();
         Label label = new Label("Guten Morgen,  Familie Wiese");
@@ -25,7 +22,6 @@ public class Starter extends Application {
 
     @Override
     public void stop() throws Exception {
-        log.info("Stopping FX app ...");
         super.stop();
     }
 
