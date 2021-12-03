@@ -19,6 +19,7 @@
         <logback.vesion>1.2.7</logback.vesion>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+        <!--javafx.platform>windows-x86_64</javafx.platform-->  <!-- linux-x86_64, linux-aarch64, linux-arm32, macosx-x86_64, macosx-aarch64, windows-x86_64, windows-x86 -->
     </properties>
 
     <build>
@@ -42,6 +43,11 @@
                             </path>
                         </annotationProcessorPaths>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.2.4</version>
                 </plugin>
             </plugins>
         </pluginManagement>
