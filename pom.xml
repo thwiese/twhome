@@ -15,9 +15,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
-        <lombok.version>1.18.22</lombok.version>
+        <javafx.version>17.0.1</javafx.version>
         <logback.vesion>1.2.7</logback.vesion>
-        <pi4j.version>2.1.0</pi4j.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
@@ -35,13 +34,6 @@
                         <showDeprecation>true</showDeprecation>
                         <showWarnings>true</showWarnings>
                         <verbose>false</verbose>
-                        <annotationProcessorPaths>
-                            <path>
-                                <groupId>org.projectlombok</groupId>
-                                <artifactId>lombok</artifactId>
-                                <version>${lombok.version}</version>
-                            </path>
-                        </annotationProcessorPaths>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -61,34 +53,17 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- LOMBOK -->
+            <!-- JAVAFX -->
             <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-                <scope>provided</scope>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-controls</artifactId>
+                <version>17.0.1</version>
             </dependency>
             <!-- LOGGING -->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.vesion}</version>
-            </dependency>
-            <!-- PI4J -->
-            <dependency>
-                <groupId>com.pi4j</groupId>
-                <artifactId>pi4j-core</artifactId>
-                <version>${pi4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.pi4j</groupId>
-                <artifactId>pi4j-plugin-raspberrypi</artifactId>
-                <version>${pi4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.pi4j</groupId>
-                <artifactId>pi4j-plugin-pigpio</artifactId>
-                <version>${pi4j.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
