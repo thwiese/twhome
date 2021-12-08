@@ -3,7 +3,7 @@
 export ENABLE_GLUON_COMMERCIAL_EXTENSIONS=true
 java \
   -Degl.displayid=/dev/dri/card0 \
-  -Dmonocle.egl.lib=/opt/javafx-sdk-17/lib/libgluon_drm-1.1.3.so \
+  -Dmonocle.egl.lib=/opt/javafx-sdk-17/lib/libgluon_drm-1.1.6.so \
   -Djava.library.path=/opt/javafx-sdk-17/lib \
   -Dmonocle.platform.traceConfig=false \
   -Dprism.verbose=false \
@@ -11,5 +11,5 @@ java \
   -Dmonocle.platform=EGL \
   --module-path .:/opt/javafx-sdk-17/lib \
   --add-modules javafx.controls \
-  --module de.twiese.twhome.fx.Starter $@
+  --jar ../target/twhome-fx.jar $@
 /sbin/init 5
