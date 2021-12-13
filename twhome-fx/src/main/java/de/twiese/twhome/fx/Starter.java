@@ -1,28 +1,36 @@
 package de.twiese.twhome.fx;
 
+import de.twiese.twhome.fx.labels.Label;
+import de.twiese.twhome.fx.panels.DatePane;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.Locale;
+import java.util.TimeZone;
+
 public class Starter extends Application {
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
+        TimeZone.setDefault(TimeZone.getTimeZone("Europe/Berlin"));
+        Locale.setDefault(Locale.GERMANY);
+
         stage.setTitle("TW Home");
         stage.setMaximized(true);
-        Pane pane = new StackPane();
-        pane.setStyle("-fx-background-color: #000000;");
+        GridPane pane = new GridPane();
+        pane.setStyle("-fx-background-color: #000000; -fx-hgap: 10px; -fx-vgap: 10px");
 
-        Label label = new Label("Guten Morgen,  Familie Wiese");
-        label.setTextFill(Color.WHITE);
-        label.setStyle("-fx-font-size: 64px");
+        pane.add(Label.build("Ich wünsche einen schönen Tag", Color.WHITE, 64), 0, 2);
+        pane.add(DatePane.build(), 0, 0);
 
-        pane.getChildren().add(label);
-        Scene scene = new Scene(pane,800, 600);
+        Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
     }
@@ -30,10 +38,6 @@ public class Starter extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
 }
