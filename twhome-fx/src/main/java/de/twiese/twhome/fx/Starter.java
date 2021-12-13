@@ -27,7 +27,9 @@ public class Starter extends Application {
         GridPane pane = new GridPane();
         pane.setStyle("-fx-background-color: #000000; -fx-hgap: 10px; -fx-vgap: 10px");
 
-        pane.add(Label.build("Ich wünsche einen schönen Tag", Color.WHITE, 64), 0, 2);
+        pane.add(Label.build("Ich wünsche einen schönen Tag und", Color.WHITE, 64), 0, 2);
+        pane.add(Label.build("viel Erfolg bei der Geo-Arbeit!", Color.WHITE, 64), 0, 3);
+
         pane.add(DatePane.build(), 0, 0);
 
         Scene scene = new Scene(pane);
