@@ -11,5 +11,5 @@ java \
   -Dmonocle.platform=EGL \
   --module-path .:/opt/javafx-sdk-17/lib \
   --add-modules javafx.controls \
-  -jar ../target/twhome-fx.jar $@
+  -jar ../target/twhome-fx.jar configLocation=~/twhome.properties $@
 /sbin/init 5
