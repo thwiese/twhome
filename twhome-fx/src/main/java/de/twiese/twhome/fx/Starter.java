@@ -17,19 +17,17 @@ public class Starter extends Application {
         launch(args);
     }
 
-    private Config config;
-
     @Override
     public void start(Stage stage) throws Exception {
         getParameters().getRaw().forEach(System.out::println);
-        this.config = new Config(getParameters().getNamed().get("configLocation"));
+        Config.init(getParameters().getNamed().get("configLocation"));
 
         stage.setTitle("TW Home");
         stage.setMaximized(true);
         GridPane pane = new GridPane();
         pane.setStyle("-fx-background-color: #000000; -fx-hgap: 10px; -fx-vgap: 10px");
 
-        pane.add(Label.build(config.getProperty("message"), Color.WHITE, 64), 0, 2);
+        pane.add(Label.build("message", "frontColor1", "fontSizeMedium"), 0, 2);
 
         pane.add(DatePane.create(), 0, 0);
 
