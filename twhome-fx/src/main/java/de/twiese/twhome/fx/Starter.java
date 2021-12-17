@@ -18,12 +18,16 @@ public class Starter extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        getParameters().getRaw().forEach(System.out::println);
-        Config.init(getParameters().getNamed().get("configLocation"));
-        Config.onConfigChangeAndNow(() -> stage.setTitle(Config.getProperty("title")));
-        stage.setMaximized(Config.getBooleanProperty("maximizeOnStartup"));
         GridPane pane = new GridPane();
-        pane.setStyle("-fx-background-color: #000000; -fx-hgap: 10px; -fx-vgap: 10px");
+        Config.init(getParameters().getNamed().get("configLocation"));
+        Config.onConfigChangeAndNow(() -> {
+            stage.setTitle(Config.getProperty("title"));
+            pane.setMinWidth(Config.getIntProperty("windowWidth"));
+            pane.setMinHeight(Config.getIntProperty("windowHeight"));
+            pane.setStyle("-fx-background-color: " + Config.getProperty("backColor1") + ";");
+        });
+        stage.setMaximized(Config.getBooleanProperty("maximizeOnStartup"));
+
         pane.add(Label.build("message", "frontColor1", "fontSizeMedium"), 0, 2);
         pane.add(DatePane.create(), 0, 0);
         Scene scene = new Scene(pane);
