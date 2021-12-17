@@ -57,6 +57,11 @@ public class Config {
         return Integer.parseInt(intString);
     }
 
+    public static boolean getBooleanProperty(String key) {
+        String booleanString = getProperty(key);
+        return Boolean.parseBoolean(booleanString);
+    }
+
     public static void onConfigChange(ChangeAction action) {
         actions.add(action);
     }

@@ -23,7 +23,7 @@ public class Starter extends Application {
         Config.init(getParameters().getNamed().get("configLocation"));
 
         stage.setTitle("TW Home");
-        stage.setMaximized(true);
+        stage.setMaximized(Config.getBooleanProperty("maximizeOnStartup"));
         GridPane pane = new GridPane();
         pane.setStyle("-fx-background-color: #000000; -fx-hgap: 10px; -fx-vgap: 10px");
 
