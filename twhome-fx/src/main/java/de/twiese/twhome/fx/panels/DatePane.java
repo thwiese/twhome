@@ -1,10 +1,10 @@
 package de.twiese.twhome.fx.panels;
 
+import de.twiese.twhome.fx.config.Config;
 import de.twiese.twhome.fx.labels.Label;
 import de.twiese.twhome.fx.support.ExecutorManager;
 import javafx.application.Platform;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,13 +12,18 @@ import java.util.concurrent.TimeUnit;
 
 public class DatePane extends GridPane {
 
-    private final Label dateLabel = Label.build("...", Color.WHITE, 20);
-    private final Label timeLabel = Label.build("...", Color.WHITE, 40);
+    private final Label dateLabel = Label.build("dummyText", "frontColor1", "fontSizeSmall");
+    private final Label timeLabel = Label.build("dummyText", "frontColor1", "fontSizeMedium");
+    private String datePattern;
+    private String timePattern;
 
     public static DatePane create() {
         DatePane pane = new DatePane();
-        pane.dateLabel.setStyle("-fx-font-size: 20px;");
-        pane.timeLabel.setStyle("-fx-font-size: 36px;");
+        Config.onConfigChangeAndNow(() -> {
+            pane.datePattern = Config.getProperty("longDatePattern");
+            pane.timePattern = Config.getProperty("timePattern");
+
+        });
         pane.add(pane.dateLabel, 0, 1);
         pane.add(pane.timeLabel, 0, 2);
         pane.refresh();
@@ -29,8 +34,8 @@ public class DatePane extends GridPane {
     public void refresh() {
         Platform.runLater(() -> {
             LocalDateTime datetime = LocalDateTime.now();
-            dateLabel.setText(datetime.format(DateTimeFormatter.ofPattern("'Heute ist 'EEEE', der 'dd. MMMM yyyy")));
-            timeLabel.setText(datetime.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+            dateLabel.setText(datetime.format(DateTimeFormatter.ofPattern(datePattern)));
+            timeLabel.setText(datetime.format(DateTimeFormatter.ofPattern(timePattern)));
         });
     }
 
