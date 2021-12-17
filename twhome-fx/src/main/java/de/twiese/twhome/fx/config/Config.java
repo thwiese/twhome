@@ -1,6 +1,7 @@
 package de.twiese.twhome.fx.config;
 
 import de.twiese.twhome.fx.support.ExecutorManager;
+import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,9 +42,13 @@ public class Config {
 
     public static String getProperty(String key) {
         if (config.properties.containsKey(key)) {
-            return config.properties.getProperty(key);
+            String value = config.properties.getProperty(key);
+            log.debug("config (custom)\t '{}' = '{}'", key, value);
+            return value;
         } else {
-            return config.defaultProperties.getProperty(key);
+            String value = config.defaultProperties.getProperty(key);
+            log.debug("config (default)\t '{}' = '{}'", key, value);
+            return value;
         }
     }
 
@@ -66,6 +71,11 @@ public class Config {
         actions.add(action);
     }
 
+    public static void onConfigChangeAndNow(ChangeAction action) {
+        action.execute();
+        actions.add(action);
+    }
+
     public void reload() throws IOException {
         if (configLocation != null && configLocation.length() > 0) {
             if (configLocation.startsWith("classpath:")) {
@@ -74,7 +84,7 @@ public class Config {
             } else if (configLocation.startsWith("http://") || configLocation.startsWith(("https://"))) {
                 throw new UnsupportedOperationException("Load configuration by http is not yet implemented");
             } else {
-
+                properties.clear();
                 properties.load(new FileInputStream(configLocation));
                 if (initialReload) {
                     watchFile(configLocation);
@@ -107,13 +117,20 @@ public class Config {
         try {
             watchExecutor.submit(() -> {
                 while (true) {
+                    log.debug("polling for configuraton changes ...");
                     WatchKey key = watcher.take();
                     key.pollEvents().forEach(event -> {
                         key.pollEvents();
-                        reloadSilently();
-                        actions.forEach(ChangeAction::execute);
+                        Path file = (Path) event.context();
+                        if (filename.endsWith(file.getFileName().toString())) {
+                            reloadSilently();
+                            Platform.runLater(() -> {
+                                actions.forEach(ChangeAction::execute);
+                            });
+                        }
                     });
                     key.reset();
+                    Thread.sleep(100);
                 }
             });
         } catch (ClosedWatchServiceException e) {
