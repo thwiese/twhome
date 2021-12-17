@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutorService;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
+@SuppressWarnings({"InfiniteLoopStatement", "BusyWait"})
 public class Config {
 
     private static final Logger log = LoggerFactory.getLogger(Config.class);
@@ -41,15 +42,15 @@ public class Config {
     }
 
     public static String getProperty(String key) {
+        String value;
         if (config.properties.containsKey(key)) {
-            String value = config.properties.getProperty(key);
+            value = config.properties.getProperty(key);
             log.debug("config (custom)\t '{}' = '{}'", key, value);
-            return value;
         } else {
-            String value = config.defaultProperties.getProperty(key);
+            value = config.defaultProperties.getProperty(key);
             log.debug("config (default)\t '{}' = '{}'", key, value);
-            return value;
         }
+        return value;
     }
 
     public static Color getColorProperty(String key) {
@@ -96,10 +97,8 @@ public class Config {
         } else {
             log.warn("No configLocation is set. Using default configuration.");
         }
-
         TimeZone.setDefault(TimeZone.getTimeZone(getProperty("timezone")));
         Locale.setDefault(new Locale(getProperty("localeLanguage"), getProperty("localeCountry")));
-
         initialReload = false;
     }
 
@@ -107,6 +106,7 @@ public class Config {
         try {
             reload();
         } catch (IOException e) {
+            log.warn("reload silently failed: {}", e.getMessage());
         }
     }
 
@@ -117,16 +117,14 @@ public class Config {
         try {
             watchExecutor.submit(() -> {
                 while (true) {
-                    log.debug("polling for configuraton changes ...");
+                    log.debug("polling for configuration changes ...");
                     WatchKey key = watcher.take();
                     key.pollEvents().forEach(event -> {
                         key.pollEvents();
                         Path file = (Path) event.context();
                         if (filename.endsWith(file.getFileName().toString())) {
                             reloadSilently();
-                            Platform.runLater(() -> {
-                                actions.forEach(ChangeAction::execute);
-                            });
+                            Platform.runLater(() -> actions.forEach(ChangeAction::execute));
                         }
                     });
                     key.reset();
@@ -134,6 +132,7 @@ public class Config {
                 }
             });
         } catch (ClosedWatchServiceException e) {
+            log.info("Config file watcher closed: {]", e);
         }
     }
 

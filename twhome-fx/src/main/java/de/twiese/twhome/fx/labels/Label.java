@@ -2,12 +2,8 @@ package de.twiese.twhome.fx.labels;
 
 import de.twiese.twhome.fx.config.Config;
 import javafx.scene.paint.Color;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Label extends javafx.scene.control.Label {
-
-    private static final Logger log = LoggerFactory.getLogger(Label.class);
 
     private Label(String text) {
         super(text);
