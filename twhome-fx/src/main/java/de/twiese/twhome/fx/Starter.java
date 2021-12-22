@@ -6,7 +6,8 @@ import de.twiese.twhome.fx.panels.DatePane;
 import de.twiese.twhome.fx.support.ExecutorManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 public class Starter extends Application {
@@ -24,7 +25,13 @@ public class Starter extends Application {
             stage.setTitle(Config.getProperty("title"));
             pane.setMinWidth(Config.getIntProperty("windowWidth"));
             pane.setMinHeight(Config.getIntProperty("windowHeight"));
-            pane.setStyle("-fx-background-color: " + Config.getProperty("backColor1") + ";");
+            //pane.setStyle("-fx-background-color: " + Config.getProperty("backColor1") + ";");
+            String bckgrnd = Config.getProperty("backgroundImage");
+            if (bckgrnd != null && bckgrnd.length() > 0) {
+                pane.setBackground(new Background(new BackgroundImage(new Image(bckgrnd), BackgroundRepeat.REPEAT,
+                        BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                        BackgroundSize.DEFAULT )));
+            }
         });
         stage.setMaximized(Config.getBooleanProperty("maximizeOnStartup"));
 
@@ -42,5 +49,6 @@ public class Starter extends Application {
         ExecutorManager.shutDownAllExecutors();
         super.stop();
     }
+
 
 }
