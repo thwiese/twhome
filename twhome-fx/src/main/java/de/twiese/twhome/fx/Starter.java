@@ -28,9 +28,9 @@ public class Starter extends Application {
             //pane.setStyle("-fx-background-color: " + Config.getProperty("backColor1") + ";");
             String bckgrnd = Config.getProperty("backgroundImage");
             if (bckgrnd != null && bckgrnd.length() > 0) {
-                pane.setBackground(new Background(new BackgroundImage(new Image(bckgrnd), BackgroundRepeat.REPEAT,
-                        BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-                        BackgroundSize.DEFAULT )));
+                pane.setBackground(new Background(new BackgroundImage(new Image(bckgrnd), BackgroundRepeat.NO_REPEAT,
+                        BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                        new BackgroundSize(pane.getWidth(), pane.getHeight(), false, false, true, true))));
             }
         });
         stage.setMaximized(Config.getBooleanProperty("maximizeOnStartup"));
