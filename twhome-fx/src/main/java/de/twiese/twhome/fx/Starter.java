@@ -33,7 +33,7 @@ public class Starter extends Application {
         pane.add(Label.build("message", "frontColor1", "fontSizeBig"), 0, 2);
         pane.add(DatePane.create(), 0, 0);
 
-        ImagePane backgroundImagePane = ImagePane.create("backgroundImage");
+        ImagePane backgroundImagePane = ImagePane.createFromConfig("backgroundImage");
         Scene scene = new Scene(stackedLayers(backgroundImagePane, pane));
         stage.setScene(scene);
         stage.show();
