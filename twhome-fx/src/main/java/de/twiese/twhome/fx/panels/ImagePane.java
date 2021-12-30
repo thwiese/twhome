@@ -1,7 +1,8 @@
 package de.twiese.twhome.fx.panels;
 
 import de.twiese.twhome.fx.config.Config;
-import javafx.scene.image.Image;
+import de.twiese.twhome.fx.support.ImageTool;
+import javafx.application.Platform;
 import javafx.scene.layout.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,13 +39,19 @@ public class ImagePane extends Pane {
         if (fileName != null && fileName.length() > 0) {
             URI imageUri = imageUris.get(0);
             log.info("Loading image {}", imageUri);
-            this.setBackground(new Background(
-                    new BackgroundImage(new Image(imageUri.toString()),
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundPosition.CENTER,
-                            new BackgroundSize(this.getWidth(), this.getHeight(), false,
-                                    false, true, true))));
+            Platform.runLater(() -> {
+                try {
+                    this.setBackground(new Background(
+                            new BackgroundImage(ImageTool.convertImage(ImageTool.getScaledImage(imageUri, (int) this.getWidth())),
+                                    BackgroundRepeat.NO_REPEAT,
+                                    BackgroundRepeat.NO_REPEAT,
+                                    BackgroundPosition.CENTER,
+                                    new BackgroundSize(this.getWidth(), this.getHeight(), false,
+                                            false, true, true))));
+                } catch (IOException e) {
+                    log.error("", e);
+                }
+            });
         } else {
             log.warn("ImagePane without image?");
         }
