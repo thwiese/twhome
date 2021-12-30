@@ -19,10 +19,9 @@ public class ImageTool {
         BufferedImage img = ImageIO.read(fileUri.toURL());
         int height = img.getHeight() * width / img.getWidth();
         log.info("Reading image {} (width: {}, height: {}, scaling to width: {}, height: {})", fileUri, img.getWidth(), img.getHeight(), width, height);
-        java.awt.Image bImage = ImageIO.read(fileUri.toURL()).getScaledInstance(width, height, Image.SCALE_DEFAULT);
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         bufferedImage.getGraphics()
-                .drawImage(bImage, 0, 0, null);
+                .drawImage(img, 0, 0, width, height, null);
         return bufferedImage;
     }
 

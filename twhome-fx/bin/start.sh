@@ -9,6 +9,7 @@ java \
   -Dprism.verbose=false \
   -Djavafx.verbose=false \
   -Dmonocle.platform=EGL \
+  -Xmx1024m \
   --module-path .:/opt/javafx-sdk-17/lib \
   --add-modules javafx.controls \
   -jar ../target/twhome-fx.jar --configLocation=/home/pi/twhome.properties $@
