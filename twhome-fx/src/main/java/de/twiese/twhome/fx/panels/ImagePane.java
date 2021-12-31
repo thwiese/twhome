@@ -59,7 +59,7 @@ public class ImagePane extends Pane {
             }
             //});
             index++;
-        }, 1, imageSwitchInterval, TimeUnit.SECONDS);
+        }, 10, imageSwitchInterval, TimeUnit.SECONDS);
 
     }
 
