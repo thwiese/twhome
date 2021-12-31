@@ -42,6 +42,8 @@ public class ImagePane extends Pane {
 
     private void refresh(String fileName) {
         resolveImages(fileName);
+        scheduler.shutdownNow();
+        scheduler = ExecutorManager.createScheduler();
         scheduler.scheduleWithFixedDelay(() -> {
             index = index >= imageUris.size() ? 0 : index;
             URI imageUri = imageUris.get(index);
