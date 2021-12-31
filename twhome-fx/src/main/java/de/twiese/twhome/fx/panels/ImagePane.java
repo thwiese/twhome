@@ -1,8 +1,8 @@
 package de.twiese.twhome.fx.panels;
 
 import de.twiese.twhome.fx.config.Config;
+import de.twiese.twhome.fx.support.ExecutorManager;
 import de.twiese.twhome.fx.support.ImageTool;
-import javafx.application.Platform;
 import javafx.scene.layout.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +13,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class ImagePane extends Pane {
@@ -20,10 +22,14 @@ public class ImagePane extends Pane {
     private static final Logger log = LoggerFactory.getLogger(ImagePane.class);
 
     private List<URI> imageUris;
+    private int index = 0;
+    private ScheduledExecutorService scheduler = ExecutorManager.createScheduler();
+    private int imageSwitchInterval = 10;
 
-    public static ImagePane createFromConfig(String cfgKey) {
-        String src = Config.getProperty(cfgKey);
+    public static ImagePane createFromConfig(String cfgKeyImagePath, String cfgKeySwitchPeriod) {
+        String src = Config.getProperty(cfgKeyImagePath);
         ImagePane pane = createFromFile(src);
+        pane.imageSwitchInterval = Config.getIntProperty(cfgKeySwitchPeriod);
         Config.onConfigChange(() -> pane.refresh(src));
         return pane;
     }
@@ -36,25 +42,25 @@ public class ImagePane extends Pane {
 
     private void refresh(String fileName) {
         resolveImages(fileName);
-        if (fileName != null && fileName.length() > 0) {
-            URI imageUri = imageUris.get(0);
-            log.info("Loading image {}", imageUri);
-            Platform.runLater(() -> {
-                try {
-                    this.setBackground(new Background(
-                            new BackgroundImage(ImageTool.convertImage(ImageTool.getScaledImage(imageUri, (int) this.getWidth())),
-                                    BackgroundRepeat.NO_REPEAT,
-                                    BackgroundRepeat.NO_REPEAT,
-                                    BackgroundPosition.CENTER,
-                                    new BackgroundSize(this.getWidth(), this.getHeight(), false,
-                                            false, true, true))));
-                } catch (IOException e) {
-                    log.error("", e);
-                }
-            });
-        } else {
-            log.warn("ImagePane without image?");
-        }
+        scheduler.scheduleWithFixedDelay(() -> {
+            index = index >= imageUris.size() ? 0 : index;
+            URI imageUri = imageUris.get(index);
+            //Platform.runLater(() -> {
+            try {
+                this.setBackground(new Background(
+                        new BackgroundImage(ImageTool.convertImage(ImageTool.getScaledImage(imageUri, (int) this.getWidth())),
+                                BackgroundRepeat.NO_REPEAT,
+                                BackgroundRepeat.NO_REPEAT,
+                                BackgroundPosition.CENTER,
+                                new BackgroundSize(this.getWidth(), this.getHeight(), false,
+                                        false, true, true))));
+            } catch (IOException e) {
+                log.error("", e);
+            }
+            //});
+            index++;
+        }, 1, imageSwitchInterval, TimeUnit.SECONDS);
+
     }
 
     private void resolveImages(String fileName) {
