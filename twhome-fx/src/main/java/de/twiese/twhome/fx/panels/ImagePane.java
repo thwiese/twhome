@@ -27,17 +27,15 @@ public class ImagePane extends Pane {
     private int imageSwitchInterval = 10;
 
     public static ImagePane createFromConfig(String cfgKeyImagePath, String cfgKeySwitchPeriod) {
-        String src = Config.getProperty(cfgKeyImagePath);
-        ImagePane pane = createFromFile(src);
+        ImagePane pane = new ImagePane();
         pane.imageSwitchInterval = Config.getIntProperty(cfgKeySwitchPeriod);
-        Config.onConfigChange(() -> pane.refresh(src));
+        Config.onConfigChangeAndNow(() -> pane.refreshConfig(cfgKeyImagePath, cfgKeySwitchPeriod));
         return pane;
     }
 
-    public static ImagePane createFromFile(String fileName) {
-        ImagePane pane = new ImagePane();
-        pane.refresh(fileName);
-        return pane;
+    private void refreshConfig(String cfgKeyImagePath, String cfgKeySwitchPeriod) {
+        this.imageSwitchInterval = Config.getIntProperty(cfgKeySwitchPeriod);
+        this.refresh(Config.getProperty(cfgKeyImagePath));
     }
 
     private void refresh(String fileName) {
