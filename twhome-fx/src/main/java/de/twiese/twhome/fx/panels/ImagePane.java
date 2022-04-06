@@ -45,7 +45,7 @@ public class ImagePane extends Pane {
         scheduler.scheduleWithFixedDelay(() -> {
             index = index >= imageUris.size() ? 0 : index;
             URI imageUri = imageUris.get(index);
-            //Platform.runLater(() -> {
+            log.debug("setting background image {}:{}", index, imageUri);
             try {
                 this.setBackground(new Background(
                         new BackgroundImage(ImageTool.convertImage(ImageTool.getScaledImage(imageUri, (int) this.getWidth())),
@@ -55,12 +55,11 @@ public class ImagePane extends Pane {
                                 new BackgroundSize(this.getWidth(), this.getHeight(), false,
                                         false, true, true))));
             } catch (IOException e) {
-                log.error("", e);
+                log.error("setting background for image {}: failed: {}", imageUri, e.getMessage());
             }
-            //});
             index++;
         }, 10, imageSwitchInterval, TimeUnit.SECONDS);
-
+        log.info("created image pane with refresh rate {} secs", imageSwitchInterval);
     }
 
     private void resolveImages(String fileName) {
@@ -68,8 +67,9 @@ public class ImagePane extends Pane {
         if (Files.isDirectory(filePath)) {
             try {
                 imageUris = Files.list(filePath).map(Path::toUri).collect(Collectors.toList());
+                log.info("found {} files in directory {}", imageUris.size(), filePath);
             } catch (IOException e) {
-                log.error("", e);
+                log.error("reading directory " + filePath + " failed", e);
             }
         } else {
             imageUris = List.of(filePath.toUri());
